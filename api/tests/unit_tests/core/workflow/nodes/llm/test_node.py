@@ -9,6 +9,7 @@ from core.app.entities.app_invoke_entities import InvokeFrom, ModelConfigWithCre
 from core.app.llm.model_access import DifyCredentialsProvider, DifyModelFactory, fetch_model_config
 from core.entities.provider_configuration import ProviderConfiguration, ProviderModelBundle
 from core.entities.provider_entities import CustomConfiguration, SystemConfiguration
+from core.model_manager import ModelInstance
 from core.model_runtime.entities.common_entities import I18nObject
 from core.model_runtime.entities.message_entities import (
     ImagePromptMessageContent,
@@ -19,7 +20,6 @@ from core.model_runtime.entities.message_entities import (
 )
 from core.model_runtime.entities.model_entities import AIModelEntity, FetchFrom, ModelType
 from core.model_runtime.model_providers.model_provider_factory import ModelProviderFactory
-from core.variables import ArrayAnySegment, ArrayFileSegment, NoneSegment
 from core.workflow.entities import GraphInitParams
 from core.workflow.file import File, FileTransferMethod, FileType
 from core.workflow.nodes.llm import llm_utils
@@ -36,6 +36,7 @@ from core.workflow.nodes.llm.node import LLMNode
 from core.workflow.nodes.llm.protocols import CredentialsProvider, ModelFactory
 from core.workflow.runtime import GraphRuntimeState, VariablePool
 from core.workflow.system_variable import SystemVariable
+from core.workflow.variables import ArrayAnySegment, ArrayFileSegment, NoneSegment
 from models.enums import UserFrom
 from models.provider import ProviderType
 
@@ -115,6 +116,7 @@ def llm_node(
         graph_runtime_state=graph_runtime_state,
         credentials_provider=mock_credentials_provider,
         model_factory=mock_model_factory,
+        model_instance=mock.MagicMock(spec=ModelInstance),
         llm_file_saver=mock_file_saver,
     )
     return node
@@ -601,6 +603,7 @@ def llm_node_for_multimodal(llm_node_data, graph_init_params, graph_runtime_stat
         graph_runtime_state=graph_runtime_state,
         credentials_provider=mock_credentials_provider,
         model_factory=mock_model_factory,
+        model_instance=mock.MagicMock(spec=ModelInstance),
         llm_file_saver=mock_file_saver,
     )
     return node, mock_file_saver
