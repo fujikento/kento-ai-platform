@@ -1,19 +1,18 @@
 import logging
 import time
-import uuid
 from collections.abc import Generator, Mapping, Sequence
-from typing import Any
+from typing import Any, cast
 
 from configs import dify_config
 from core.app.apps.exc import GenerateTaskStoppedError
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.app.workflow.layers.observability import ObservabilityLayer
 from core.app.workflow.node_factory import DifyNodeFactory
-from core.file.models import File
 from core.workflow.constants import ENVIRONMENT_VARIABLE_NODE_ID
 from core.workflow.entities import GraphInitParams
 from core.workflow.entities.graph_config import NodeConfigDictAdapter
 from core.workflow.errors import WorkflowNodeRunFailedError
+from core.workflow.file.models import File
 from core.workflow.graph import Graph
 from core.workflow.graph_engine import GraphEngine, GraphEngineConfig
 from core.workflow.graph_engine.command_channels import InMemoryChannel
@@ -169,7 +168,8 @@ class WorkflowEntry:
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )
-        node = node_factory.create_node(node_config)
+        typed_node_config = cast(dict[str, object], node_config)
+        node = cast(Any, node_factory).create_node(typed_node_config)
         node_cls = type(node)
 
         try:
@@ -257,7 +257,7 @@ class WorkflowEntry:
 
     @classmethod
     def run_free_node(
-        cls, node_data: dict, node_id: str, tenant_id: str, user_id: str, user_inputs: dict[str, Any]
+        cls, node_data: dict[str, Any], node_id: str, tenant_id: str, user_id: str, user_inputs: dict[str, Any]
     ) -> tuple[Node, Generator[GraphNodeEventBase, None, None]]:
         """
         Run free node
@@ -304,12 +304,11 @@ class WorkflowEntry:
 
         # init workflow run state
         node_config = NodeConfigDictAdapter.validate_python({"id": node_id, "data": node_data})
-        node: Node = node_cls(
-            id=str(uuid.uuid4()),
-            config=node_config,
+        node_factory = DifyNodeFactory(
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )
+        node = node_factory.create_node(node_config)
 
         try:
             # variable selector to variable mapping
