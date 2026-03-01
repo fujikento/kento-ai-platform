@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any
 
 from core.datasource.entities.datasource_entities import DatasourceProviderType
 from core.plugin.impl.exc import PluginDaemonClientSideError
+from core.workflow.entities.graph_config import NodeConfigDict
 from core.workflow.entities.workflow_node_execution import WorkflowNodeExecutionStatus
 from core.workflow.enums import NodeExecutionType, NodeType, SystemVariableKey
 from core.workflow.node_events import NodeRunResult, StreamCompletedEvent
@@ -34,7 +35,7 @@ class DatasourceNode(Node[DatasourceNodeData]):
     def __init__(
         self,
         id: str,
-        config: Mapping[str, Any],
+        config: NodeConfigDict,
         graph_init_params: "GraphInitParams",
         graph_runtime_state: "GraphRuntimeState",
         datasource_manager: DatasourceManagerProtocol,

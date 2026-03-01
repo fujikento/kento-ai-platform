@@ -24,6 +24,7 @@ from core.prompt.advanced_prompt_transform import AdvancedPromptTransform
 from core.prompt.entities.advanced_prompt_entities import ChatModelMessage, CompletionModelPromptTemplate
 from core.prompt.simple_prompt_transform import ModelMode
 from core.prompt.utils.prompt_message_util import PromptMessageUtil
+from core.workflow.entities.graph_config import NodeConfigDict
 from core.workflow.enums import NodeType, WorkflowNodeExecutionMetadataKey, WorkflowNodeExecutionStatus
 from core.workflow.file import File
 from core.workflow.node_events import NodeRunResult
@@ -101,7 +102,7 @@ class ParameterExtractorNode(Node[ParameterExtractorNodeData]):
     def __init__(
         self,
         id: str,
-        config: Mapping[str, Any],
+        config: NodeConfigDict,
         graph_init_params: "GraphInitParams",
         graph_runtime_state: "GraphRuntimeState",
         *,

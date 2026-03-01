@@ -21,6 +21,7 @@ from docx.table import Table
 from docx.text.paragraph import Paragraph
 
 from core.helper import ssrf_proxy
+from core.workflow.entities.graph_config import NodeConfigDict
 from core.workflow.enums import NodeType, WorkflowNodeExecutionStatus
 from core.workflow.file import File, FileTransferMethod, file_manager
 from core.workflow.node_events import NodeRunResult
@@ -53,7 +54,7 @@ class DocumentExtractorNode(Node[DocumentExtractorNodeData]):
     def __init__(
         self,
         id: str,
-        config: Mapping[str, Any],
+        config: NodeConfigDict,
         graph_init_params: "GraphInitParams",
         graph_runtime_state: "GraphRuntimeState",
         *,

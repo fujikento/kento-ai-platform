@@ -177,11 +177,12 @@ class DifyNodeFactory(NodeFactory):
             )
 
         if node_type == NodeType.LLM:
-            model_instance = self._build_model_instance_for_llm_node(node_data)
-            memory = self._build_memory_for_llm_node(node_data=node_data, model_instance=model_instance)
+            node_data_dict = node_data.model_dump()
+            model_instance = self._build_model_instance_for_llm_node(node_data_dict)
+            memory = self._build_memory_for_llm_node(node_data=node_data_dict, model_instance=model_instance)
             return LLMNode(
                 id=node_id,
-                config=node_config,
+                config=typed_node_config,
                 graph_init_params=self.graph_init_params,
                 graph_runtime_state=self.graph_runtime_state,
                 credentials_provider=self._llm_credentials_provider,
@@ -193,7 +194,7 @@ class DifyNodeFactory(NodeFactory):
         if node_type == NodeType.DATASOURCE:
             return DatasourceNode(
                 id=node_id,
-                config=node_config,
+                config=typed_node_config,
                 graph_init_params=self.graph_init_params,
                 graph_runtime_state=self.graph_runtime_state,
                 datasource_manager=DatasourceManager,
@@ -211,17 +212,17 @@ class DifyNodeFactory(NodeFactory):
         if node_type == NodeType.DOCUMENT_EXTRACTOR:
             return DocumentExtractorNode(
                 id=node_id,
-                config=node_config,
+                config=typed_node_config,
                 graph_init_params=self.graph_init_params,
                 graph_runtime_state=self.graph_runtime_state,
                 unstructured_api_config=self._document_extractor_unstructured_api_config,
             )
 
         if node_type == NodeType.QUESTION_CLASSIFIER:
-            model_instance = self._build_model_instance_for_llm_node(node_data)
+            model_instance = self._build_model_instance_for_llm_node(node_data.model_dump())
             return QuestionClassifierNode(
                 id=node_id,
-                config=node_config,
+                config=typed_node_config,
                 graph_init_params=self.graph_init_params,
                 graph_runtime_state=self.graph_runtime_state,
                 credentials_provider=self._llm_credentials_provider,
@@ -230,10 +231,10 @@ class DifyNodeFactory(NodeFactory):
             )
 
         if node_type == NodeType.PARAMETER_EXTRACTOR:
-            model_instance = self._build_model_instance_for_llm_node(node_data)
+            model_instance = self._build_model_instance_for_llm_node(node_data.model_dump())
             return ParameterExtractorNode(
                 id=node_id,
-                config=node_config,
+                config=typed_node_config,
                 graph_init_params=self.graph_init_params,
                 graph_runtime_state=self.graph_runtime_state,
                 credentials_provider=self._llm_credentials_provider,
