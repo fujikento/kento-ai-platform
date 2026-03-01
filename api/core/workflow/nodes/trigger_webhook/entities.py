@@ -3,9 +3,9 @@ from enum import StrEnum
 
 from pydantic import BaseModel, Field, field_validator
 
-from core.workflow.variables.types import SegmentType
 from core.workflow.enums import NodeType
 from core.workflow.nodes.base import BaseNodeData
+from core.workflow.variables.types import SegmentType
 
 _WEBHOOK_ALLOWED_TYPES = frozenset(
     {

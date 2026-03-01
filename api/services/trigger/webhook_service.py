@@ -18,13 +18,13 @@ from core.app.entities.app_invoke_entities import InvokeFrom
 from core.tools.tool_file_manager import ToolFileManager
 from core.workflow.entities.graph_config import NodeConfigDict, NodeConfigDictAdapter
 from core.workflow.enums import NodeType
+from core.workflow.file.models import FileTransferMethod
 from core.workflow.nodes.trigger_webhook.entities import (
     ContentType,
     WebhookBodyParameter,
     WebhookData,
     WebhookParameter,
 )
-from core.workflow.file.models import FileTransferMethod
 from core.workflow.variables.types import ArrayValidation, SegmentType
 from enums.quota_type import QuotaType
 from extensions.ext_database import db
