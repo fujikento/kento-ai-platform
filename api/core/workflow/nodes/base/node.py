@@ -131,11 +131,11 @@ class Node(Generic[NodeDataT]):
         Later, in __init__:
         ::
 
-            config["data"] ──► _hydrate_node_data() ──► _node_data_type.model_validate()
-                                                                │
-                                                                ▼
-                                                        CodeNodeData instance
-                                                        (stored in self._node_data)
+            config["data"] ──► _node_data_type.model_validate()
+                                                │
+                                                ▼
+                                        CodeNodeData instance
+                                        (stored in self._node_data)
 
         Example:
             class CodeNode(Node[CodeNodeData]):  # CodeNodeData is auto-extracted
@@ -297,9 +297,6 @@ class Node(Generic[NodeDataT]):
         if not execution_id:
             return None
         return str(execution_id)
-
-    def _hydrate_node_data(self, data: Mapping[str, Any]) -> NodeDataT:
-        return self._node_data_type.model_validate(data)
 
     @abstractmethod
     def _run(self) -> NodeRunResult | Generator[NodeEventBase, None, None]:
